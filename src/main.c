@@ -4,9 +4,7 @@
 #include <string.h>
 #include <assert.h>
 #include "utils.h"
-#define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
-#define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
 #define HEAP_SIZE 2048 * 2048 * 4
@@ -23,4 +21,22 @@ int main(int argc, char** argv) {
 	heap = (uint8_t*)malloc(HEAP_SIZE);
 	assert(heap != NULL);
 	
+	int width, height, channels;
+
+	unsigned char* img = stbi_load("../Labyrinthe/31.bmp", &width, &height, &channels, 0);
+	if (img == NULL) {
+		printf("Error in loading image \n");
+		exit(1);
+	}
+	printf("Loaded image with a width of %dpx, a height of %dpx and %d channels\n", width, height, channels);
+
+	int pixel_count = width * height;
+
+	for (int i = 0; i < pixel_count; i++) {
+		int x = i % width;
+		int y = i / width;
+
+		unsigned char* pixel = img + i * channels;
+		printf("Pixel at (%d, %d): Red = %d\n", x, y, pixel[0]);
+	}
 }
